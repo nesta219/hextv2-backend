@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "scenes": [
+    {
+      "id": "hidden_lake",
+      "displayName": "Hidden Lake",
+      "scenePath": "Scenes/Backgrounds/HiddenLake",
+      "bundleUrl": null,
+      "thumbnailUrl": null,
+      "enabled": true
+    },
+    {
+      "id": "volcanic_coast",
+      "displayName": "Volcanic Coast",
+      "scenePath": "Scenes/Backgrounds/VolcanicCoast",
+      "bundleUrl": null,
+      "thumbnailUrl": null,
+      "enabled": true
+    }
+  ]
+}
