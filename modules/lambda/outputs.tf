@@ -14,6 +14,14 @@ output "get_top_scores_function_name" {
   value = aws_lambda_function.get_top_scores.function_name
 }
 
+output "get_player_scores_invoke_arn" {
+  value = aws_lambda_function.get_player_scores.invoke_arn
+}
+
+output "get_player_scores_function_name" {
+  value = aws_lambda_function.get_player_scores.function_name
+}
+
 output "get_scenes_invoke_arn" {
   value = aws_lambda_function.get_scenes.invoke_arn
 }

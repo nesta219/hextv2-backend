@@ -63,6 +63,13 @@ resource "aws_apigatewayv2_integration" "get_top_scores" {
   payload_format_version = "2.0"
 }
 
+resource "aws_apigatewayv2_integration" "get_player_scores" {
+  api_id                 = aws_apigatewayv2_api.main.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = var.get_player_scores_invoke_arn
+  payload_format_version = "2.0"
+}
+
 resource "aws_apigatewayv2_integration" "get_scenes" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "AWS_PROXY"
@@ -82,6 +89,12 @@ resource "aws_apigatewayv2_route" "get_top_scores" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "GET /scores/top"
   target    = "integrations/${aws_apigatewayv2_integration.get_top_scores.id}"
+}
+
+resource "aws_apigatewayv2_route" "get_player_scores" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "GET /scores/player/{playerId}"
+  target    = "integrations/${aws_apigatewayv2_integration.get_player_scores.id}"
 }
 
 resource "aws_apigatewayv2_route" "get_scenes" {
@@ -104,6 +117,14 @@ resource "aws_lambda_permission" "get_top_scores" {
   statement_id  = "AllowAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = var.get_top_scores_function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.main.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "get_player_scores" {
+  statement_id  = "AllowAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = var.get_player_scores_function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.main.execution_arn}/*/*"
 }

@@ -19,6 +19,14 @@ variable "get_top_scores_function_name" {
   type = string
 }
 
+variable "get_player_scores_invoke_arn" {
+  type = string
+}
+
+variable "get_player_scores_function_name" {
+  type = string
+}
+
 variable "get_scenes_invoke_arn" {
   type = string
 }

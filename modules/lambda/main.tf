@@ -69,6 +69,12 @@ data "archive_file" "get_top_scores" {
   output_path = "${var.lambdas_source_dir}/../.build/get_top_scores.zip"
 }
 
+data "archive_file" "get_player_scores" {
+  type        = "zip"
+  source_dir  = "${var.lambdas_source_dir}/get_player_scores"
+  output_path = "${var.lambdas_source_dir}/../.build/get_player_scores.zip"
+}
+
 data "archive_file" "get_scenes" {
   type        = "zip"
   source_dir  = "${var.lambdas_source_dir}/get_scenes"
@@ -108,6 +114,23 @@ resource "aws_lambda_function" "get_top_scores" {
     variables = {
       SCORES_TABLE = var.dynamodb_table_name
       GSI_NAME     = var.dynamodb_gsi_name
+    }
+  }
+}
+
+resource "aws_lambda_function" "get_player_scores" {
+  function_name    = "hextv2-get-player-scores-${var.environment}"
+  role             = aws_iam_role.lambda.arn
+  handler          = "handler.lambda_handler"
+  runtime          = "python3.12"
+  memory_size      = 128
+  timeout          = 10
+  filename         = data.archive_file.get_player_scores.output_path
+  source_code_hash = data.archive_file.get_player_scores.output_base64sha256
+
+  environment {
+    variables = {
+      SCORES_TABLE = var.dynamodb_table_name
     }
   }
 }

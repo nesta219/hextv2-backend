@@ -1,5 +1,6 @@
 import json
 import os
+import re
 from datetime import datetime, timezone
 
 import boto3
@@ -33,6 +34,8 @@ def lambda_handler(event, context):
     score = int(score)
     high_hex = int(body.get("highHex", 0))
     display_name = str(body.get("displayName", "Anonymous"))[:20]
+    raw_initials = str(body.get("initials", "???")).upper()[:3]
+    initials = raw_initials if re.match(r"^[A-Z]{3}$", raw_initials) else "???"
     timestamp = datetime.now(timezone.utc).isoformat()
 
     item = {
@@ -41,6 +44,7 @@ def lambda_handler(event, context):
         "score": score,
         "highHex": high_hex,
         "displayName": display_name,
+        "initials": initials,
         "scorePartition": "GLOBAL",
     }
 
