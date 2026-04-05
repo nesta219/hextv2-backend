@@ -36,3 +36,42 @@ resource "aws_s3_object" "manifest" {
   content_type = "application/json"
   etag         = filemd5(var.manifest_source)
 }
+
+# --- IAM User for Editor Uploads ---
+
+resource "aws_iam_user" "editor_upload" {
+  name = "hextv2-editor-upload-${var.environment}"
+}
+
+resource "aws_iam_user_policy" "editor_upload" {
+  name = "hextv2-editor-upload-policy-${var.environment}"
+  user = aws_iam_user.editor_upload.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowBundleUpload"
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          aws_s3_bucket.scenes.arn,
+          "${aws_s3_bucket.scenes.arn}/*"
+        ]
+      },
+      {
+        Sid    = "AllowCloudFrontInvalidation"
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateInvalidation"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}

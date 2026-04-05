@@ -14,10 +14,10 @@ ENV ?= dev
 MOD ?=
 
 # Dependency-ordered list of modules
-MODULES := dynamodb s3-scenes cognito lambda api-gateway dns
+MODULES := dynamodb s3-scenes cognito lambda api-gateway dns cloudfront
 
 # Reverse order for destroy
-MODULES_REV := dns api-gateway lambda cognito s3-scenes dynamodb
+MODULES_REV := cloudfront dns api-gateway lambda cognito s3-scenes dynamodb
 
 ENV_DIR := environments/$(ENV)
 

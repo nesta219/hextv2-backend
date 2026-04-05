@@ -6,4 +6,5 @@ locals {
   domain         = "mikenesta.com"
   environment    = "prod"
   api_subdomain  = "api.hextv2"
+  cdn_subdomain  = "cdn.hextv2"
 }
